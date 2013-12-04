@@ -14,7 +14,6 @@ import org.testng.annotations.Test;
  */
 public class CompleteRecycledConsumerBench {
 
-
     public CompleteRecycledConsumerBench() {
     }
 
@@ -27,7 +26,7 @@ public class CompleteRecycledConsumerBench {
     }
 
     @Before
-    public void setUp()  {
+    public void setUp() {
     }
 
     @After
@@ -36,15 +35,16 @@ public class CompleteRecycledConsumerBench {
 
     @Test
     public void testBenchCompleteRecycledConsumer() throws IOException {
-        
+
         GeneralConsumer consumer;
         consumer = new GeneralConsumer();
+        consumer.setAutoAck(false);
         consumer.setQueueName("BENCH");
         consumer.prepare();
-        for(long ii = 0; ii < 100000000L; ii++) {
+        for (long ii = 0; ii < 100000000L; ii++) {
             consumer.run();
         }
-        
+
     }
 
 }

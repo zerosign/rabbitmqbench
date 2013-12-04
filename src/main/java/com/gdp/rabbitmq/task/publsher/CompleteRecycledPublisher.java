@@ -20,7 +20,7 @@ public class CompleteRecycledPublisher extends Publisher {
         connection = factory.newConnection();
 
         channel = connection.createChannel();
-
+        persistence = true;
     }
 
     @Override

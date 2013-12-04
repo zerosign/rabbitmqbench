@@ -79,7 +79,7 @@ public class SharedConnectionBench {
     @Test
     public void benchConsumeRecycledLotOfMessages() throws InterruptedException, IOException {
         System.out.println("benchConsumeRecycledLotOfMessages");
-        
+
         final Connection connection = factory.newConnection();
         final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         for (int ii = 0; ii < 100; ii++) {
@@ -91,8 +91,9 @@ public class SharedConnectionBench {
                     try {
                         final SharedConnectionConsumer consumer = new SharedConnectionConsumer(connection);
                         consumer.setQueueName("TASKS");
+                        consumer.setAutoAck(false);
                         consumer.prepare();
-                        for (long ii = 0; ii < 1000000000L; ii++) {
+                        for (long ii = 0; ii < 100000L; ii++) {
                             consumer.run();
                             System.out.println("Consuming : " + ii + " in " + THREAD_NUMBER);
                         }

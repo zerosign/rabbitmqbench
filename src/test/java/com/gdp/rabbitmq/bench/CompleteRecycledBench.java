@@ -13,33 +13,33 @@ import org.testng.annotations.Test;
  * @author zerosign
  */
 public class CompleteRecycledBench {
-
+    
     public CompleteRecycledBench() {
     }
-
+    
     @org.testng.annotations.BeforeClass
     public static void setUpClass() throws Exception {
     }
-
+    
     @org.testng.annotations.AfterClass
     public static void tearDownClass() throws Exception {
     }
-
+    
     @org.testng.annotations.BeforeMethod
     public void setUpMethod() throws Exception {
     }
-
+    
     @org.testng.annotations.AfterMethod
     public void tearDownMethod() throws Exception {
     }
-
+    
     @Test
     public void benchPublishRecycledLotOfMessages() throws InterruptedException {
         System.out.println("benchPublishRecycledLotOfMessages");
         final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         for (int ii = 0; ii < 100; ii++) {
             executor.execute(new Runnable() {
-
+                
                 @Override
                 public void run() {
                     try {
@@ -56,12 +56,12 @@ public class CompleteRecycledBench {
                 }
             });
         }
-
+        
         executor.shutdown();
         executor.awaitTermination(1, TimeUnit.HOURS);
-
+        
     }
-
+    
     @Test
     public void benchConsumeRecycledLotOfMessages() throws InterruptedException {
         System.out.println("benchConsumeRecycledLotOfMessages");
@@ -69,25 +69,26 @@ public class CompleteRecycledBench {
         for (int ii = 0; ii < 100; ii++) {
             final int THREAD_NUMBER = ii;
             executor.execute(new Runnable() {
-
+                
                 @Override
                 public void run() {
                     try {
                         final GeneralConsumer consumer = new GeneralConsumer();
+                        consumer.setAutoAck(false);
                         consumer.setQueueName("TASKS");
                         consumer.prepare();
-                        for (long ii = 0; ii < 1000000000L; ii++) {
+                        for (long ii = 0; ii < 100000L; ii++) {
                             consumer.run();
-                            System.out.println("Consuming : " + ii + " in " + THREAD_NUMBER );
+                            System.out.println("Consuming : " + ii + " in " + THREAD_NUMBER);
                         }
                     } catch (IOException ex) {
                     }
                 }
             });
         }
-
+        
         executor.shutdown();
         executor.awaitTermination(1, TimeUnit.HOURS);
     }
-
+    
 }

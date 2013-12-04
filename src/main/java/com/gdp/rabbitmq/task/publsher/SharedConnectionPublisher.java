@@ -16,6 +16,7 @@ public class SharedConnectionPublisher extends Publisher {
     public SharedConnectionPublisher(Connection connection) throws IOException {
         this.connection = connection;
         channel = connection.createChannel();
+        persistence = true;
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.gdp.rabbitmq;
 import com.gdp.rabbitmq.objects.Executable;
 import com.gdp.rabbitmq.objects.Task;
 import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.MessageProperties;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutput;
@@ -16,6 +17,7 @@ public abstract class Publisher extends Executable {
 
     protected Channel channel;
     protected String queueName;
+    protected boolean persistence;
 
     public Publisher() {
     }
@@ -38,6 +40,15 @@ public abstract class Publisher extends Executable {
 
     public void prepare() throws IOException {
         channel.queueDeclare(queueName, true, false, false, null);
+        channel.basicQos(1);
+    }
+
+    public boolean isPersistence() {
+        return persistence;
+    }
+
+    public void setPersistence(boolean persistence) {
+        this.persistence = persistence;
     }
 
     public void publish(Task task) {
@@ -45,7 +56,11 @@ public abstract class Publisher extends Executable {
             ByteArrayOutputStream streamOutput = new ByteArrayOutputStream();
             ObjectOutput writer = new ObjectOutputStream(streamOutput);
             writer.writeObject(task);
-            channel.basicPublish("", queueName, null, streamOutput.toByteArray());
+            if (isPersistence())
+                channel.basicPublish("", queueName, MessageProperties.PERSISTENT_TEXT_PLAIN, 
+                        streamOutput.toByteArray());
+            else 
+                channel.basicPublish("", queueName, null, streamOutput.toByteArray());
             writer.close();
             streamOutput.close();
             try {

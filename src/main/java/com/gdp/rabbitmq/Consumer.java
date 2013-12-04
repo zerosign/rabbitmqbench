@@ -19,6 +19,7 @@ public abstract class Consumer extends Executable {
     protected Channel channel;
     protected String queueName;
     protected QueueingConsumer consumer;
+    protected boolean autoAck;
 
     public Consumer() {
     }
@@ -40,11 +41,21 @@ public abstract class Consumer extends Executable {
         this.queueName = queueName;
     }
 
+    public boolean isAutoAck() {
+        return autoAck;
+    }
+
+    public void setAutoAck(boolean autoAck) {
+        this.autoAck = autoAck;
+    }
+    
+    
+
     public void prepare() throws IOException {
 
         channel.queueDeclare(queueName, true, false, false, null);
         consumer = new QueueingConsumer(channel);  
-        channel.basicConsume(queueName, false, consumer);
+        channel.basicConsume(queueName, autoAck, consumer);
         
     }
 
@@ -57,6 +68,7 @@ public abstract class Consumer extends Executable {
         Task newTask = (Task) reader.readObject();
         reader.close();
         inputStream.close();
+        
         channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
         return newTask;
     }

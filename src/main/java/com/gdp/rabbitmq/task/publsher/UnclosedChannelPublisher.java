@@ -12,6 +12,7 @@ public class UnclosedChannelPublisher extends Publisher {
 
     public UnclosedChannelPublisher(final Channel channel) {
         this.channel = channel;
+        persistence = true;
     }
 
     @Override

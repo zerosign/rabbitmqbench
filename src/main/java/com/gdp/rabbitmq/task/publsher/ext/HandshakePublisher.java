@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.gdp.rabbitmq.task.publsher.ext;
 
 import com.gdp.rabbitmq.Publisher;
@@ -20,13 +19,15 @@ import java.util.logging.Logger;
  * @author zerosign
  */
 public class HandshakePublisher extends Publisher {
+
     private Connection connection;
 
-    public HandshakePublisher() throws IOException {ConnectionFactory factory = new ConnectionFactory();
+    public HandshakePublisher() throws IOException {
+        ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("127.0.0.1");
         connection = factory.newConnection();
         channel = connection.createChannel();
-
+        persistence = true;
     }
 
     @Override
@@ -47,6 +48,5 @@ public class HandshakePublisher extends Publisher {
             Logger.getLogger(HandshakePublisher.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
+
 }

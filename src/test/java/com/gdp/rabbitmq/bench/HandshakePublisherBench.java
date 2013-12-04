@@ -47,7 +47,7 @@ public class HandshakePublisherBench {
         publisher = new HandshakePublisher();
         publisher.setQueueName("HANDSHAKE");
         publisher.prepare();
-         for (long ii = 0; ii < 1000000000L; ii++) {
+         for (long ii = 0; ii < 100000L; ii++) {
             publisher.run();
         }
         publisher.drop();

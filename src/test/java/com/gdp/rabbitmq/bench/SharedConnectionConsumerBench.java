@@ -50,7 +50,7 @@ public class SharedConnectionConsumerBench {
     public void testBenchSharedConnectionConsumer() throws IOException {
         final SharedConnectionConsumer consumer
                 = new SharedConnectionConsumer(connection);
-
+        consumer.setAutoAck(false);
         consumer.setQueueName("BENCH_SHARED");
         consumer.prepare();
         for (long ii = 0; ii < 1000000000L; ii++) {
